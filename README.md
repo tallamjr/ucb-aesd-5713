@@ -2,7 +2,7 @@
 
 Taken as the Advanced Embedded Linux Development Specialization on Coursera.
 
-## Unit 1: Linux System Programming and Introduction to Buildroot
+## [Unit 1: Linux System Programming and Introduction to Buildroot](https://www.coursera.org/learn/linux-system-programming-introduction-to-buildroot)
 
 > This course provides an overview of System Programming for the Linux operating
 > system, or software which is interfacing directly with the Linux Kernel and C
