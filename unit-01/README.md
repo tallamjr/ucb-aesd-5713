@@ -13,6 +13,11 @@
   * [**Toolchain and Cross Compilation**](#toolchain-and-cross-compilation)
   * [**Scripting**](#scripting)
   * [**Logging with Syslog**](#logging-with-syslog)
+* [Assignments](#assignments)
+  * [Assignment 1](#assignment-1)
+  * [Assignment 2](#assignment-2)
+    * [Implementation:](#implementation)
+    * [Validation/Deliverables:](#validationdeliverables)
 
 <!-- mtoc-end -->
 
@@ -137,3 +142,79 @@
   syslog(LOG_INFO, "This is an informational message");
   ```
 - Logs are stored in `/var/log/syslog`.
+
+## Assignments
+
+### Assignment 1
+
+### Assignment 2
+
+Solution completed @ LINK
+
+#### Implementation:
+
+1. **Setup your assignment repository** using the GitHub Classroom instructions and links provided.
+
+   - You should see your previous assignment content in the repository linked from the GitHub Classroom link at the top of the document when you complete these steps.
+
+2. **Setup an ARM cross-compile toolchain** as described in Module 1 instructions and the wiki page at [Installing an ARM aarch64 developer toolchain](https://github.com/cu-ecen-aeld/aesd-assignments/wiki/Installing-an-ARM-aarch64-developer-toolchain).
+
+3. **Create a file** `assignments/assignment2/cross-compile.txt` in your repository showing version, configuration, and sysroot path of `aarch64-none-linux-gnu-gcc` using `-print-sysroot` and `-v` options.
+
+   - There are no restrictions on how you create or fill this file, and you may copy and paste from the command line output.
+   - If using redirection, ensure content written to stderr is redirected correctly using the guidance [here](https://stackoverflow.com/a/876242).
+
+4. **Write a C application** `writer` (`finder-app/writer.c`), which:
+
+   - Implements file IO as described in LSP Chapter 2.
+   - Requirements:
+     - Unlike Assignment 1, **you do not need to create directories**—assume they already exist.
+     - Set up **syslog logging** using the `LOG_USER` facility.
+     - Write a syslog message: `"Writing <string> to <file>"`, where `<string>` is the text written and `<file>` is the file created.
+     - Log unexpected errors with `LOG_ERR` level.
+   - Example syslog levels:
+     ```c
+     syslog(LOG_DEBUG, "Writing %s to %s", string, file);
+     syslog(LOG_ERR, "Error writing to file: %s", strerror(errno));
+     ```
+
+5. **Write a Makefile**, which includes:
+
+   - A default target to build the `writer` application.
+   - A clean target to remove the application and `.o` files.
+   - Support for **cross-compilation**:
+     - When `CROSS_COMPILE` is specified as `aarch64-none-linux-gnu-`, the build system should use the cross-compiler.
+
+6. **Modify `finder-test.sh`**, ensuring:
+
+   - Clean-up of any previous build artifacts.
+   - Native compilation of `writer`.
+   - Replacement of `writer.sh` with the `writer` application.
+
+7. **Test the implementation** using the script:
+
+   ```bash
+   ./full-test.sh
+   ```
+
+8. **Verify file type** using the `file` utility:
+   - Include the output of the `file` utility for a build using `CROSS_COMPILE` in `assignments/assignment2/fileresult.txt`.
+
+#### Validation/Deliverables:
+
+1. Your `assignments/assignment2/cross-compile.txt` file should show the version, configuration, and sysroot path (output of `-print-sysroot`).
+
+2. The `finder-test.sh` script should return “success” when run.
+
+3. Your writer application should meet requirements from assignment 1 regarding error handling.
+
+4. Ensure all error handling has been implemented for `writer.c`.
+
+   - Ensure syslog logging is set up and working properly (you should see messages logged to `/var/log/syslog` on your Ubuntu VM).
+   - If using Windows Subsystem for Linux, you may need to manually start syslog with `sudo service rsyslog start`.
+
+5. Your `assignments/assignment2/fileresult.txt` should show that you were able to cross-compile successfully.
+
+6. Your GitHub Actions automated test script should pass on your repository, and the "Actions" tab should show a successful run on your last commit.
+
+---
